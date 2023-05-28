@@ -47,17 +47,17 @@ namespace WinFormsApp123
 
             foreach (char s in richTextBox1.Text)
             {
-                    if (Lexems.IsIDVariable(subText) && (s == '.' || s == ' ' || s == ',' || s == '<' || s == ':' || s == '>' || s == ';' || s == '+' || s == '-' || s == '*' || s == '/'))
+                    if (Lexems.IsIDVariable(subText) && (s == '.' || s == ' ' || s == ',' || s == '<' || s == ':' || s == '>' || s == ';' || s == '+' || s == '-' || s == '*' || s == '/' || s =='\n'))
                     {
                         lexemes.Add(subText + " - Идентификатор;");
                         subText = "";
                     }
-                    else if (Lexems.IsLiteral(subText) && (s == ' ' || s == ';' || s == ')'))
+                    else if (Lexems.IsLiteral(subText) && (s == ' ' || s == ';' || s == ')' || s == '\n'))
                     {
                         lexemes.Add(subText + " - Литератор;");
                         subText = "";
                     }
-                    else if (Lexems.IsSeparator(subText) && (s == ' ' || s == ')' || char.IsDigit(s) || char.IsLetter(s)))
+                    else if (Lexems.IsSeparator(subText) && (s == ' ' || s == ')' || s == '\n' || char.IsDigit(s) || char.IsLetter(s)))
                     {
                         if (subText != "\n")
                         {
@@ -65,7 +65,7 @@ namespace WinFormsApp123
                         }
                         subText = "";
                     }
-                else if (subText == Environment.NewLine || subText == " ")
+                else if (subText == Environment.NewLine || subText == " " || s == '\n')
                 {
                     subText = "";
                 }
@@ -100,7 +100,7 @@ namespace WinFormsApp123
             string subText = " ";
             foreach (char s in richTextBox1.Text)
             {
-                    if (Lexems.IsOperator(subText) && (s == '.' || s == ':' || s == ',' || s == ' ' || s == '(' || s == ' ' || s == '<' || s == '>' || s == ';'))
+                    if (Lexems.IsOperator(subText) && (s == '.' || s == ':' || s == ',' || s == ' ' || s == '(' || s == ' ' || s == '<' || s == '>' || s == ';' || s == '\n'))
                     {
                         i++;
                         listBuf.Add(subText + " ");
@@ -109,7 +109,7 @@ namespace WinFormsApp123
 
                         subText = "";
                     }
-                    else if (Lexems.IsLiteral(subText) && (s == ' ' || s == ';' || s == ')'))
+                    else if (Lexems.IsLiteral(subText) && (s == ' ' || s == ';' || s == ')' || s == '\n'))
                     {
                         i++;
                         listBuf.Add(subText + " ");
@@ -118,7 +118,7 @@ namespace WinFormsApp123
 
                         subText = "";
                     }
-                    else if (Lexems.IsSeparator(subText) && (s == ' ' || s == ')' || char.IsDigit(s) || char.IsLetter(s)))
+                    else if (Lexems.IsSeparator(subText) && (s == ' ' || s == ')' || s == '\n' || char.IsDigit(s) || char.IsLetter(s)))
                     {
                         i++;
                         if (subText != "\n")
@@ -130,7 +130,7 @@ namespace WinFormsApp123
                         subText = "";
                     }
 
-                    else if (Lexems.IsIDVariable(subText) && !Lexems.IsOperator(subText) && (s == '.' || s == ' ' || s == ',' || s == '<' || s == ':' || s == '>' || s == ';' || s == '+' || s == '-' || s == '*' || s == '/'))
+                    else if (Lexems.IsIDVariable(subText) && !Lexems.IsOperator(subText) && (s == '.' || s == ' ' || s == ',' || s == '<' || s == ':' || s == '>' || s == ';' || s == '+' || s == '-' || s == '*' || s == '/' || s == '\n'))
                     {
                         i++;
                         listBuf.Add(subText + " ");
@@ -139,7 +139,7 @@ namespace WinFormsApp123
                         subText = "";
                     }
 
-                    else if (subText == Environment.NewLine || subText == " ")
+                    else if (subText == Environment.NewLine || subText == " " || s == '\n')
                     {
                         subText = "";
                     }
