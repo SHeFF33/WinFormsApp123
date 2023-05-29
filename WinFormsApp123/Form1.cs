@@ -100,49 +100,49 @@ namespace WinFormsApp123
             string subText = " ";
             foreach (char s in richTextBox1.Text)
             {
-                    if (Lexems.IsOperator(subText) && (s == '.' || s == ':' || s == ',' || s == ' ' || s == '(' || s == ' ' || s == '<' || s == '>' || s == ';' || s == '\n'))
+                if (Lexems.IsOperator(subText) && (s == ' ' || s == ')' || s == '<' || s == '>' || s == ';' || s == '+' || s == '-' || s == '*' || s == '/' || s == ',' || s == ':' || s == '.' || s == '\n'))
+                {
+                    i++;
+                    listBuf.Add(subText + " ");
+                    forToken.Add("I");
+                    forChar.Add(' ');
+
+                    subText = "";
+                }
+                else if (Lexems.IsLiteral(subText) && (s == ' ' || s == ';' || s == ')' || s == ':' || s == '.' || s == '+' || s == '-' || s == '*' || s == '/' || s == '\n'))
+                {
+                    i++;
+                    listBuf.Add(subText + " ");
+                    forToken.Add("D");
+                    forChar.Add(' ');
+
+                    subText = "";
+                }
+                else if (Lexems.IsSeparator(subText) && (s == ' ' || s == '(' || s == ')' || s == ';' || s == '/' || s == '*' || s == '+' || s == '-' || s == '\n' || char.IsDigit(s) || char.IsLetter(s)))
+                {
+                    i++;
+                    if (subText != "\n")
                     {
-                        i++;
                         listBuf.Add(subText + " ");
-                        forToken.Add("I");
-                        forChar.Add(' ');
+                        forToken.Add("R");
+                        forChar.Add(s);
+                    }
+                    subText = "";
+                }
 
-                        subText = "";
-                    }
-                    else if (Lexems.IsLiteral(subText) && (s == ' ' || s == ';' || s == ')' || s == '\n'))
-                    {
-                        i++;
-                        listBuf.Add(subText + " ");
-                        forToken.Add("D");
-                        forChar.Add(' ');
+                else if (Lexems.IsIDVariable(subText) && !Lexems.IsOperator(subText) && (s == ')' || s == ' ' || s == '<' || s == '>' || s == ';' || s == '+' || s == '-' || s == '*' || s == '/' || s == ',' || s == ':' || s == '.' || s == '\n'))
+                {
+                    i++;
+                    listBuf.Add(subText + " ");
+                    forToken.Add("P");
+                    forChar.Add(' ');
+                    subText = "";
+                }
 
-                        subText = "";
-                    }
-                    else if (Lexems.IsSeparator(subText) && (s == ' ' || s == ')' || s == '\n' || char.IsDigit(s) || char.IsLetter(s)))
-                    {
-                        i++;
-                        if (subText != "\n")
-                        {
-                            listBuf.Add(subText + " ");
-                            forToken.Add("R");
-                            forChar.Add(s);
-                        }
-                        subText = "";
-                    }
-
-                    else if (Lexems.IsIDVariable(subText) && !Lexems.IsOperator(subText) && (s == '.' || s == ' ' || s == ',' || s == '<' || s == ':' || s == '>' || s == ';' || s == '+' || s == '-' || s == '*' || s == '/' || s == '\n'))
-                    {
-                        i++;
-                        listBuf.Add(subText + " ");
-                        forToken.Add("P");
-                        forChar.Add(' ');
-                        subText = "";
-                    }
-
-                    else if (subText == Environment.NewLine || subText == " " || s == '\n')
-                    {
-                        subText = "";
-                    }
+                else if (subText == Environment.NewLine || subText == " " || s == ')' || s == '(' || s == '\n')
+                {
+                    subText = "";
+                }
                 if (subText.Length > 8)
                 {
                     IsFinishLexemAnalis = false;

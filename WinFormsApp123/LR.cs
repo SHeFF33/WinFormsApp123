@@ -23,7 +23,7 @@ namespace WinFormsApp123
         }
         private Token GetLexeme(int nextLex)
         {
-            return tokens[nextLex];
+                return tokens[nextLex];
         }
 
         private void Shift()
@@ -292,7 +292,7 @@ namespace WinFormsApp123
                     GoToState(15);
                     break;
                 default:
-                    throw new Exception($"String: {nextLex}; Ожидались: цикл(for)  или переменная,  но было получено: {lexemStack.Peek().Qwerty}");
+                    throw new Exception($"String: {nextLex}; Ожидались: end, for  или переменная,  но было получено: {lexemStack.Peek().Qwerty}");
             }
         }
         private void State11()
@@ -468,10 +468,10 @@ namespace WinFormsApp123
         }
         private void State26()
         {
-            if (lexemStack.Peek().Type == TokenType.POINT)
-                Reduce(6, "<программа>");
-            else
-                throw new Exception($"String {nextLex}: Ожидалось: точка, но было получено: {lexemStack.Peek().Qwerty}");
+                if (lexemStack.Peek().Type == TokenType.POINT)
+                    Reduce(6, "<программа>");
+                else
+                    throw new Exception($"String {nextLex}: Ожидалось: точка, но было получено: {lexemStack.Peek().Qwerty}");
         }
         private void State27()
         {

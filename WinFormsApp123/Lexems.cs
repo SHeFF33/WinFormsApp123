@@ -15,7 +15,7 @@ namespace WinFormsApp123
         public static bool IsSeparator(string text)
         {
             return text == "\n" || text == ","|| text == ":" || text == ":="  || text == "="
-                || text == "+" || text == "-" || text == "." || text == "*" ||
+                || text == "+" || text == "-" || text == "." || text == "*" || text == "(" || text == ")" ||
                 text == "/" || text == ";";
         }
         public static bool IsLiteral(string text)

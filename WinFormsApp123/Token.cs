@@ -23,7 +23,7 @@ namespace WinFormsApp123
         {
             FOR, VAR, INTEGER, REAL, DOUBLE, DO, NUMBER, BEGIN, END, NETERM, EXPR,
             TO, PLUS,
-            MINUS, EQUAL, SEMICOLON, MULTIPLY, COMMA, DIVISION, POINT, COLON, VARIABLE, COLONEQUAL, ASSIGNMENT
+            MINUS, EQUAL, SEMICOLON, MULTIPLY, COMMA, DIVISION, POINT, COLON, VARIABLE, COLONEQUAL, ASSIGNMENT, LPAR, RPAR
         }
         public static TokenType[] Delimiters = new TokenType[]
             { 
@@ -63,6 +63,8 @@ namespace WinFormsApp123
             { "-", TokenType.MINUS },
             { "=", TokenType.EQUAL },
             { "*", TokenType.MULTIPLY },
+            { "(", TokenType.LPAR },
+            { ")", TokenType.RPAR },
             { "/", TokenType.DIVISION },
             { ":=", TokenType.ASSIGNMENT},
             { ",", TokenType.COMMA },

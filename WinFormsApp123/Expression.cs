@@ -9,43 +9,44 @@ using System.Threading.Tasks;
 
 namespace WinFormsApp123
 {
-   public class Expression
+    public class Expression
     {
-        LR lr;
-        List<Token> ExpressionStack = new List<Token>();
+        List<Token> ExprStack = new List<Token>();
         Stack<string> Operations = new Stack<string>();
         Stack<int> Prioritis = new Stack<int>();
         int index = 0;
+        int countLpar = 0;
+        int countRpar = 0;
         string output = null;
-        Dictionary<string,int> priority = new Dictionary<string, int>()
+        Dictionary<string, int> priority = new Dictionary<string, int>()
         {
-            {"+", 0}, {"-", 0},
-            {"*", 1}, {"/", 1}
+            {"(", 0},
+            {")", 1},
+            {"+", 2}, {"-", 2},
+            {"*", 3}, {"/", 3}
         };
         public void TakeToken(Token token)
         {
-
-            ExpressionStack.Add(token);
+            ExprStack.Add(token);
         }
         public void Start()
         {
-                Decstra();
-                PolishNotation();
-
+            Decstra();
+            ReversePolishNotation();
         }
-        private void HighPriority(string operation)  
+        private void HighPriority(string operation)
         {
             int count = Operations.Count();
             Stack<string> temp = new Stack<string>();
             Stack<int> priorityTemp = new Stack<int>();
             for (int i = 0; i < count; i++)
             {
-                if(Prioritis.Peek() >= priority[operation])
+                if (Prioritis.Peek() >= priority[operation])
                 {
                     output += Operations.Pop();
                     Prioritis.Pop();
                 }
-                else 
+                else
                 {
                     temp.Push(Operations.Pop());
                     priorityTemp.Push(Prioritis.Pop());
@@ -54,35 +55,34 @@ namespace WinFormsApp123
             temp.Reverse();
             priorityTemp.Reverse();
             int countTemp = temp.Count();
-            for(int i = 0; i < countTemp; i++)
+            for (int i = 0; i < countTemp; i++)
             {
                 Operations.Push(temp.Pop());
                 Prioritis.Push(priorityTemp.Pop());
             }
-            Operations.Push(ExpressionStack[index].Qwerty);
-            Prioritis.Push(priority[operation]);  
+            Operations.Push(ExprStack[index].Qwerty);
+            Prioritis.Push(priority[operation]);
         }
 
         private void Decstra()
         {
-            if (ExpressionStack[index].Type == Token.TokenType.VARIABLE || ExpressionStack[index].Type == Token.TokenType.NUMBER)
+            if (ExprStack[index].Type == Token.TokenType.LPAR || ExprStack[index].Type == Token.TokenType.NUMBER || ExprStack[index].Type == Token.TokenType.VARIABLE)
             {
                 Prioritis.Push(0);
-
-                while (index != ExpressionStack.Count())
+                while (index != ExprStack.Count())
                 {
-                    if (ExpressionStack[index].Type == Token.TokenType.NUMBER || ExpressionStack[index].Type == Token.TokenType.VARIABLE)
+                    if (ExprStack[index].Type == Token.TokenType.NUMBER || ExprStack[index].Type == Token.TokenType.VARIABLE)
                     {
-                        output += ExpressionStack[index].Qwerty + " ";
+                        output += ExprStack[index].Qwerty + " ";
                         index++;
                     }
-                    else if (ExpressionStack[index].Type == Token.TokenType.PLUS)
+                    else if (ExprStack[index].Type == Token.TokenType.PLUS)
                     {
                         string operation = "+";
 
                         if ((priority[operation] > Prioritis.Peek()) || Operations.Count() == 0)
                         {
-                            Operations.Push(ExpressionStack[index].Qwerty);
+                            Operations.Push(ExprStack[index].Qwerty);
                             Prioritis.Push(priority[operation]);
                         }
                         else
@@ -91,12 +91,14 @@ namespace WinFormsApp123
                         }
                         index++;
                     }
-                    else if (ExpressionStack[index].Type == Token.TokenType.MINUS)
+
+                    else if (ExprStack[index].Type == Token.TokenType.MINUS)
                     {
                         string operation = "-";
+
                         if ((priority[operation] > Prioritis.Peek()) || Operations.Count() == 0)
                         {
-                            Operations.Push(ExpressionStack[index].Qwerty);
+                            Operations.Push(ExprStack[index].Qwerty);
                             Prioritis.Push(priority[operation]);
                         }
                         else
@@ -105,12 +107,14 @@ namespace WinFormsApp123
                         }
                         index++;
                     }
-                    else if (ExpressionStack[index].Type == Token.TokenType.MULTIPLY)
+
+                    else if (ExprStack[index].Type == Token.TokenType.MULTIPLY)
                     {
                         string operation = "*";
+
                         if ((priority[operation] > Prioritis.Peek()) || Operations.Count() == 0)
                         {
-                            Operations.Push(ExpressionStack[index].Qwerty);
+                            Operations.Push(ExprStack[index].Qwerty);
                             Prioritis.Push(priority[operation]);
                         }
                         else
@@ -119,13 +123,14 @@ namespace WinFormsApp123
                         }
                         index++;
                     }
-                    else if (ExpressionStack[index].Type == Token.TokenType.DIVISION)
+
+                    else if (ExprStack[index].Type == Token.TokenType.DIVISION)
                     {
                         string operation = "/";
-                        if ((priority[operation] > Prioritis.Peek()) || Operations.Count() == 0)
 
+                        if ((priority[operation] > Prioritis.Peek()) || Operations.Count() == 0)
                         {
-                            Operations.Push(ExpressionStack[index].Qwerty);
+                            Operations.Push(ExprStack[index].Qwerty);
                             Prioritis.Push(priority[operation]);
                         }
                         else
@@ -134,9 +139,45 @@ namespace WinFormsApp123
                         }
                         index++;
                     }
-                    else if (ExpressionStack[index].Type == Token.TokenType.VARIABLE || ExpressionStack[index].Type == Token.TokenType.NUMBER)
+
+                    else if (ExprStack[index].Type == Token.TokenType.LPAR)
                     {
-                        break;
+                        string operation = "(";
+                        countLpar++;
+
+                        if ((priority[operation] > Prioritis.Peek()) || Operations.Count() == 0)
+                        {
+                            Operations.Push(ExprStack[index].Qwerty);
+                            Prioritis.Push(priority[operation]);
+                        }
+                        else
+                        {
+                            Operations.Push(operation);
+                            Prioritis.Push(priority[operation]);
+                        }
+                        index++;
+                    }
+
+                    else if (ExprStack[index].Type == Token.TokenType.RPAR)
+                    {
+                        string operation = ")";
+                        countLpar--;
+                        countRpar++;
+
+                        if ((priority[operation] > Prioritis.Peek() || Operations.Count() == 0) && countLpar == countRpar )
+                        {
+                            Operations.Push(ExprStack[index].Qwerty);
+                            Prioritis.Push(priority[operation]);
+                        }
+                        else
+                        {
+                            HighPriority(operation);
+                            Operations.Pop();
+                            Operations.Pop();
+                            Prioritis.Pop();
+                            Prioritis.Pop();
+                        }
+                        index++;
                     }
                 }
                 int countOperations = Operations.Count();
@@ -146,7 +187,7 @@ namespace WinFormsApp123
                 }
             }
         }
-        public void PolishNotation()
+        public void ReversePolishNotation()
         {
             Dictionary<int, string> M = new Dictionary<int, string>();
             Stack<string> stackOperand = new Stack<string>();
@@ -159,32 +200,36 @@ namespace WinFormsApp123
 
                     case ('+'):
                         {
-                            M.Add(key, stackOperand.Pop() + " " + stackOperand.Pop() + " " + "+");
+                            M.Add(key, "+" + " " + stackOperand.Pop() + " " + stackOperand.Pop());
                             stackOperand.Push("M" + key.ToString());
                             key++;
                             break;
                         }
+
                     case ('-'):
                         {
-                            M.Add(key, stackOperand.Pop() + " " + stackOperand.Pop() + " " + "-");
+                            M.Add(key, "-" + " " + stackOperand.Pop() + " " + stackOperand.Pop());
                             stackOperand.Push("M" + key.ToString());
                             key++;
                             break;
                         }
+
                     case ('*'):
                         {
-                            M.Add(key, stackOperand.Pop() + " " + stackOperand.Pop() + " " + "*");
+                            M.Add(key, "*" + " " + stackOperand.Pop() + " " + stackOperand.Pop());
                             stackOperand.Push("M" + key.ToString());
                             key++;
                             break;
                         }
+
                     case ('/'):
                         {
-                            M.Add(key, stackOperand.Pop() + " " + stackOperand.Pop() + " " + "/");
+                            M.Add(key, "/" + " " + stackOperand.Pop() + " " + stackOperand.Pop());
                             stackOperand.Push("M" + key.ToString());
                             key++;
                             break;
                         }
+
                     default:
                         {
                             if (Regex.IsMatch(currentChar.ToString(), "^[a-zA-Z]+$") || Regex.IsMatch(currentChar.ToString(), "^[0-9]+$"))
@@ -196,6 +241,13 @@ namespace WinFormsApp123
                                     i++;
                                 }
                                 stackOperand.Push(temp);
+                            }
+                            else if (currentChar == ' ')
+                            {
+                            }
+                            else
+                            {
+                                throw new System.Exception();
                             }
                             break;
                         }
