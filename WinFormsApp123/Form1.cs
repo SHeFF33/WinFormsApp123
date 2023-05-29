@@ -47,24 +47,24 @@ namespace WinFormsApp123
 
             foreach (char s in richTextBox1.Text)
             {
-                    if (Lexems.IsIDVariable(subText) && (s == '.' || s == ' ' || s == ',' || s == '<' || s == ':' || s == '>' || s == ';' || s == '+' || s == '-' || s == '*' || s == '/' || s =='\n'))
+                if (Lexems.IsIDVariable(subText) && (s == ' ' || s == ')' || s == '<' || s == '>' || s == ';' || s == '+' || s == '-' || s == '*' || s == '/' || s == ',' || s == ':' || s == '.' || s == '\n'))
+                {
+                    lexemes.Add(subText + " - Идентификатор;");
+                    subText = "";
+                }
+                else if (Lexems.IsLiteral(subText) && (s == ' ' || s == ';' || s == ')' || s == ':' || s == '.' || s == '+' || s == '-' || s == '*' || s == '/' || s == '\n'))
+                {
+                    lexemes.Add(subText + " - Литератор;");
+                    subText = "";
+                }
+                else if (Lexems.IsSeparator(subText) && (s == ' ' || s == '(' || s == ')' || s == ';' || s == '/' || s == '*' || s == '+' || s == '-' || s == '\n' || char.IsDigit(s) || char.IsLetter(s)))
+                {
+                    if (subText != "\n")
                     {
-                        lexemes.Add(subText + " - Идентификатор;");
-                        subText = "";
+                        lexemes.Add(subText + " - Разделитель;");
                     }
-                    else if (Lexems.IsLiteral(subText) && (s == ' ' || s == ';' || s == ')' || s == '\n'))
-                    {
-                        lexemes.Add(subText + " - Литератор;");
-                        subText = "";
-                    }
-                    else if (Lexems.IsSeparator(subText) && (s == ' ' || s == ')' || s == '\n' || char.IsDigit(s) || char.IsLetter(s)))
-                    {
-                        if (subText != "\n")
-                        {
-                            lexemes.Add(subText + " - Разделитель;");
-                        }
-                        subText = "";
-                    }
+                    subText = "";
+                }
                 else if (subText == Environment.NewLine || subText == " " || s == '\n')
                 {
                     subText = "";
