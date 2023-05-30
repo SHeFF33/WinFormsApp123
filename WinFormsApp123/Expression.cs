@@ -164,7 +164,7 @@ namespace WinFormsApp123
                         countLpar--;
                         countRpar++;
 
-                        if ((priority[operation] > Prioritis.Peek() || Operations.Count() == 0) && countLpar == countRpar )
+                        if ((priority[operation] > Prioritis.Peek() || Operations.Count() == 0) && countLpar == countRpar)
                         {
                             Operations.Push(ExprStack[index].Qwerty);
                             Prioritis.Push(priority[operation]);
@@ -179,6 +179,7 @@ namespace WinFormsApp123
                         }
                         index++;
                     }
+                    
                 }
                 int countOperations = Operations.Count();
                 for (int i = 0; i < countOperations; i++)
@@ -189,7 +190,7 @@ namespace WinFormsApp123
         }
         public void ReversePolishNotation()
         {
-            Dictionary<int, string> M = new Dictionary<int, string>();
+            Dictionary<int, string> DictEnter = new Dictionary<int, string>();
             Stack<string> stackOperand = new Stack<string>();
             int key = 1;
             for (int i = 0; i < output.Count(); i++)
@@ -200,7 +201,7 @@ namespace WinFormsApp123
 
                     case ('+'):
                         {
-                            M.Add(key, "+" + " " + stackOperand.Pop() + " " + stackOperand.Pop());
+                            DictEnter.Add(key, "+" + " " + stackOperand.Pop() + " " + stackOperand.Pop());
                             stackOperand.Push("M" + key.ToString());
                             key++;
                             break;
@@ -208,7 +209,7 @@ namespace WinFormsApp123
 
                     case ('-'):
                         {
-                            M.Add(key, "-" + " " + stackOperand.Pop() + " " + stackOperand.Pop());
+                            DictEnter.Add(key, "-" + " " + stackOperand.Pop() + " " + stackOperand.Pop());
                             stackOperand.Push("M" + key.ToString());
                             key++;
                             break;
@@ -216,7 +217,7 @@ namespace WinFormsApp123
 
                     case ('*'):
                         {
-                            M.Add(key, "*" + " " + stackOperand.Pop() + " " + stackOperand.Pop());
+                            DictEnter.Add(key, "*" + " " + stackOperand.Pop() + " " + stackOperand.Pop());
                             stackOperand.Push("M" + key.ToString());
                             key++;
                             break;
@@ -224,7 +225,7 @@ namespace WinFormsApp123
 
                     case ('/'):
                         {
-                            M.Add(key, "/" + " " + stackOperand.Pop() + " " + stackOperand.Pop());
+                            DictEnter.Add(key, "/" + " " + stackOperand.Pop() + " " + stackOperand.Pop());
                             stackOperand.Push("M" + key.ToString());
                             key++;
                             break;
@@ -247,7 +248,7 @@ namespace WinFormsApp123
                             }
                             else
                             {
-                                throw new System.Exception();
+                                throw new System.Exception("Ошибка!");
                             }
                             break;
                         }
@@ -262,10 +263,10 @@ namespace WinFormsApp123
             {
                 Form1.form.Conclusion(stackOperand.Pop());
             }
-            int countM = M.Count;
+            int countM = DictEnter.Count;
             for (int i = 1; i < countM + 1; i++)
             {
-                Form1.form.Conclusion("M" + i + ":" + M[i]);
+                Form1.form.Conclusion("M" + i + ":" + DictEnter[i]);
             }
             Form1.form.Conclusion("-------------------------");
         }
